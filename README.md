@@ -1,6 +1,6 @@
 # What Do They Really Think?
 
-An interactive guessing game about political perception gaps. Students guess what Democrats and Republicans believe and who belongs to each party, then compare their guesses with real survey data and with what each party guessed about the other. By Gwen Sharp, as a companion to Chapter 11 (Politics) of *A Sociology Experiment*.
+An interactive guessing game about political perception gaps. Students guess what Democrats and Republicans believe and who belongs to each party, then compare their guesses with real survey data and with what each party guessed about the other. By Gwen Sharp.
 
 **Live site:** https://gsharpokie.github.io/politicalbeliefs/
 

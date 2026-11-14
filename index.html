@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Do They Really Think?</title>
+<meta name="description" content="Guess what Democrats and Republicans believe and who they are, then see the real survey numbers. Most of us picture the other side as more extreme than it is.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gsharpokie.github.io/politicalbeliefs/">
+<meta property="og:title" content="What Do They Really Think?">
+<meta property="og:description" content="Guess what Democrats and Republicans believe and who they are, then see the real survey numbers. Most of us picture the other side as more extreme than it is.">
+<meta property="og:image" content="https://gsharpokie.github.io/politicalbeliefs/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="What Do They Really Think? A chart comparing what Republicans actually believe with what Democrats guessed.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@gsharpokie">
+<meta name="twitter:title" content="What Do They Really Think?">
+<meta name="twitter:description" content="Guess what Democrats and Republicans believe and who they are, then see the real survey numbers. Most of us picture the other side as more extreme than it is.">
+<meta name="twitter:image" content="https://gsharpokie.github.io/politicalbeliefs/preview.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b2124'/%3E%3Ccircle cx='10' cy='16' r='5' fill='%237b4886'/%3E%3Ccircle cx='23' cy='16' r='5' fill='%230c6a62'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,750&display=swap" rel="stylesheet">
+<style>
+/* Layout: one centered column; a question card on top, a dot plot on one 0–100 scale for every reveal, a summary chart at the end.
+   Party colors (red/blue) are deliberately avoided so the page doesn't cue team loyalty. */
+:root {
+  --paper: #f2f3ef;
+  --surface: #ffffff;
+  --ink: #1b2124;
+  --muted: #5a6468;
+  --line: #d6dad4;
+  --you: #b5620a;
+  --actual: #0c6a62;
+  --theirs: #7b4886;
+  --own: #6a767e;
+  --focus: #b5620a;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: Aptos, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #14181a; --surface: #1d2326; --ink: #edf0ec; --muted: #a2acb0; --line: #343c40;
+    --you: #f0a548; --actual: #4fc3b6; --theirs: #c995d4; --own: #9aa6ad; --focus: #f0a548;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #14181a; --surface: #1d2326; --ink: #edf0ec; --muted: #a2acb0; --line: #343c40;
+  --you: #f0a548; --actual: #4fc3b6; --theirs: #c995d4; --own: #9aa6ad; --focus: #f0a548;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 1.05rem; line-height: 1.55; }
+.wrap { max-width: 46rem; margin: 0 auto; padding: 2rem 1rem 3rem; display: grid; gap: 1.5rem; }
+header { display: grid; gap: .4rem; }
+.kicker { font-size: .85rem; color: var(--muted); letter-spacing: .02em; }
+h1 { font-family: var(--display); font-weight: 750; font-size: clamp(2rem, 6vw, 2.9rem); line-height: 1.05; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 1.45rem; line-height: 1.2; margin: 0; text-wrap: balance; }
+h3 { font-family: var(--display); font-weight: 600; font-size: 1.1rem; margin: 0; }
+.lede { margin: 0; max-width: 62ch; color: var(--muted); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1.4rem; display: grid; gap: 1rem; }
+.meta { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; justify-content: space-between; font-size: .88rem; color: var(--muted); }
+.chip { display: inline-block; padding: .15rem .6rem; border-radius: 999px; border: 1px solid var(--line); font-size: .82rem; color: var(--ink); }
+.progress { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.progress > span { display: block; height: 100%; background: var(--ink); transition: width .3s ease; }
+.round-intro { font-size: .93rem; color: var(--muted); margin: 0; max-width: 62ch; }
+.question { font-size: 1.15rem; margin: 0; font-weight: 600; }
+blockquote { margin: 0; padding: .7rem 1rem; border-left: 4px solid var(--ink); background: var(--paper); border-radius: 0 8px 8px 0; font-size: 1.1rem; }
+.guess { display: grid; gap: .5rem; }
+.guess-row { display: flex; align-items: center; gap: 1rem; }
+.guess-row input[type=range] { flex: 1; accent-color: var(--you); height: 2rem; }
+.guess-val { font-family: var(--display); font-weight: 750; font-size: 2rem; min-width: 4.5ch; text-align: right; color: var(--you); font-variant-numeric: tabular-nums; }
+.scale-labels { display: flex; justify-content: space-between; font-size: .8rem; color: var(--muted); }
+button { font: inherit; font-weight: 600; border-radius: 10px; padding: .65rem 1.2rem; cursor: pointer; border: 1px solid var(--ink); }
+.primary { background: var(--ink); color: var(--paper); }
+.secondary { background: transparent; color: var(--ink); }
+.linkish { background: none; border: none; padding: 0; color: var(--muted); text-decoration: underline; font-weight: 400; font-size: .9rem; }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+.reveal { display: grid; gap: .8rem; }
+.plot { display: grid; gap: .15rem; }
+.plot-row { display: grid; grid-template-columns: 10.5rem 1fr; align-items: center; gap: .5rem; }
+.plot-row .lab { font-size: .88rem; }
+.plot-row svg, .axis svg { width: 100%; height: auto; display: block; overflow: visible; }
+.axis { display: grid; grid-template-columns: 10.5rem 1fr; gap: .5rem; }
+.takeaway { margin: 0; font-size: 1rem; }
+.takeaway strong { font-variant-numeric: tabular-nums; }
+.score { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 1rem; }
+.stat { border: 1px solid var(--line); border-radius: 12px; padding: 1rem; display: grid; gap: .2rem; }
+.stat .num { font-family: var(--display); font-weight: 750; font-size: 2.2rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat .num.you { color: var(--you); }
+.stat .num.theirs { color: var(--theirs); }
+.stat .cap { font-size: .88rem; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 1rem; font-size: .85rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.sum-group { display: grid; gap: .6rem; }
+.sum-row { display: grid; grid-template-columns: 12rem 1fr; gap: .5rem; align-items: center; }
+.sum-row .lab { font-size: .86rem; line-height: 1.3; }
+.sum-row svg { width: 100%; height: auto; display: block; overflow: visible; }
+.prose p, .prose ul, .prose ol { margin: 0 0 .7rem; max-width: 64ch; }
+.prose li { margin-bottom: .35rem; }
+.notes { font-size: .88rem; color: var(--muted); }
+.notes a, .prose a, .kicker a, footer a { color: var(--ink); }
+footer { font-size: .85rem; color: var(--muted); display: grid; gap: .3rem; }
+.hidden { display: none !important; }
+svg text { fill: var(--muted); font-family: var(--body); font-size: 19px; font-variant-numeric: tabular-nums; }
+svg text.val { font-weight: 700; font-size: 22px; }
+@media (max-width: 560px) {
+  .plot-row, .axis, .sum-row { grid-template-columns: 1fr; gap: .1rem; }
+  .axis .spacer { display: none; }
+  .plot-row { margin-bottom: .3rem; }
+  .card { padding: 1.1rem; }
+}
+@media (prefers-reduced-motion: reduce) { .progress > span { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">A companion to <em>A Sociology Experiment</em>, Chapter 11: Politics · By Gwen Sharp · <a href="https://x.com/gsharpokie">@gsharpokie</a></div>
+    <h1>What Do They Really Think?</h1>
+    <p class="lede">Most of us carry around a picture of “the other side.” Guess what Americans in each party believe and who they are, then see how close you got. You’ll guess about both parties, so it doesn’t matter which side you’re on, or if you’re on neither.</p>
+  </header>
+
+  <main id="app">
+    <section class="card" id="quiz" aria-live="polite">
+      <div class="meta">
+        <span id="roundChip" class="chip">Round 1: Beliefs</span>
+        <span id="counter">Question 1 of 18</span>
+      </div>
+      <div class="progress" aria-hidden="true"><span id="bar" style="width:0%"></span></div>
+      <p class="round-intro" id="roundIntro"></p>
+      <p class="question" id="qText"></p>
+      <blockquote id="qQuote"></blockquote>
+
+      <div class="guess" id="guessBlock">
+        <label for="slider" class="cap">Your guess</label>
+        <div class="guess-row">
+          <input type="range" id="slider" min="0" max="100" step="1" value="50">
+          <output id="guessVal" class="guess-val" for="slider">50%</output>
+        </div>
+        <div class="scale-labels"><span>0%</span><span>50%</span><span>100%</span></div>
+      </div>
+
+      <div class="reveal hidden" id="reveal">
+        <div class="plot" id="plot"></div>
+        <p class="takeaway" id="takeaway"></p>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="lockBtn">Lock in my guess</button>
+        <button class="primary hidden" id="nextBtn">Next question</button>
+        <button class="linkish" id="skipBtn">Skip to all the answers</button>
+      </div>
+    </section>
+
+    <section class="card hidden" id="summary">
+      <h2 id="sumHead">How did you do?</h2>
+      <div class="score" id="score"></div>
+      <div class="legend" aria-hidden="true">
+        <span><svg width="14" height="14"><circle cx="7" cy="7" r="6" fill="var(--actual)"/></svg>Actual</span>
+        <span><svg width="14" height="14"><circle cx="7" cy="7" r="6" fill="var(--theirs)"/></svg>Other party’s average guess</span>
+        <span><svg width="14" height="14"><rect x="2.5" y="2.5" width="9" height="9" transform="rotate(45 7 7)" fill="none" stroke="var(--you)" stroke-width="2.5"/></svg>Your guess</span>
+      </div>
+      <div class="sum-group" id="sum1"></div>
+      <div class="sum-group" id="sum2"></div>
+
+      <div class="prose">
+        <h3>Why it matters</h3>
+        <p>Both studies found that Americans picture the other party as more extreme and more unusual than it really is. More in Common found that Democrats and Republicans imagined almost twice as many people on the other side held extreme views as really do. People with bigger perception gaps also felt more negatively toward the other side.</p>
+        <p>There’s good news in the same research. Most people on each side agree with plenty of statements the other side assumes they reject. When Ahler and Sood told people what the other party actually looks like, they saw its members as less extreme and felt less socially distant from them.</p>
+        <h3>Talk about it</h3>
+        <ol>
+          <li>Where does your picture of each party come from? Think about who you know, what you watch, and what you scroll past.</li>
+          <li>More in Common found that Democrats with more education had <em>larger</em> perception gaps, and that the most educated Democrats were the most likely to say most of their friends share their politics. What does that suggest about social networks and stereotypes?</li>
+          <li>The groups people overestimated are the ones they associate with each party. How is this like stereotypes about other groups we study, such as racial or gender groups?</li>
+          <li>These surveys were done in 2015 and 2018. Would the gaps be bigger or smaller today? How could you find out?</li>
+        </ol>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="restartBtn">Start over</button>
+      </div>
+
+      <div class="notes prose">
+        <h3>About the data</h3>
+        <p><strong>Round 1:</strong> More in Common surveyed 2,100 U.S. adults online with YouGov on November 7–10, 2018, right after the midterm elections (936 Democrats, 755 Republicans, 409 independents; margin of error ±2.1 points overall). Each partisan’s guess shown here is the average estimate from the other party.</p>
+        <p><strong>Round 2:</strong> Ahler and Sood’s guesses come from a YouGov survey of 1,000 Americans in March 2015. The actual shares come mostly from the 2012 American National Election Study, with Pew Research Center data for religion. Both parties’ makeup has changed since then.</p>
+        <p><strong>Sources:</strong> Yudkin, Daniel, Stephen Hawkins, and Tim Dixon. 2019. <a href="https://perceptiongap.us/"><em>The Perception Gap: How False Impressions Are Pulling Americans Apart</em></a>. More in Common. Ahler, Douglas J., and Gaurav Sood. 2018. <a href="https://doi.org/10.1086/697253">“The Parties in Our Heads: Misperceptions about Party Composition and Their Consequences.”</a> <em>Journal of Politics</em> 80(3): 964–981.</p>
+        <h3>How to cite this page</h3>
+        <p>Sharp, Gwen. 2026. “What Do They Really Think?” <a href="https://gsharpokie.github.io/politicalbeliefs/">https://gsharpokie.github.io/politicalbeliefs/</a></p>
+        <p>Spot an error? <a href="https://github.com/gsharpokie/politicalbeliefs/issues/new">Suggest a correction</a> (needs a free GitHub account).</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Created by Gwen Sharp (<a href="https://x.com/gsharpokie">@gsharpokie</a>). Licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>.</span>
+  </footer>
+</div>
+
+<script>
+const PARTY = { R: "Republicans", D: "Democrats" };
+const OTHER = { R: "Democrats", D: "Republicans" };
+
+const INTRO1 = "In November 2018, the research group More in Common asked Democrats and Republicans for their own views, then asked each side to guess how the other side answered.";
+const INTRO2 = "In 2015, political scientists Douglas Ahler and Gaurav Sood asked Americans what share of each party belongs to groups people often link to that party.";
+
+// Round 1: More in Common (2019), Tables 1 and 2. actual = party's own answer; other = other party's average estimate.
+// Round 2: Ahler & Sood (2018), Table 1. actual = true share; other = out-party mean estimate; own = in-party mean estimate.
+const Q = [
+  { r:1, p:"R", verb:"agreed with", s:"Properly controlled immigration can be good for America.", short:"Controlled immigration can be good", actual:85, other:52 },
+  { r:1, p:"D", verb:"disagreed with", s:"Most police are bad people.", short:"Disagree: most police are bad", actual:85, other:48 },
+  { r:1, p:"R", verb:"agreed with", s:"Racism still exists in America.", short:"Racism still exists", actual:79, other:51 },
+  { r:1, p:"D", verb:"agreed with", s:"I am proud to be American, though I acknowledge my country’s flaws.", short:"Proud to be American", actual:82, other:54 },
+  { r:1, p:"R", verb:"agreed with", s:"Many Muslims are good Americans.", short:"Many Muslims are good Americans", actual:70, other:41 },
+  { r:1, p:"D", verb:"disagreed with", s:"The U.S. should have completely open borders.", short:"Disagree: completely open borders", actual:71, other:38 },
+  { r:1, p:"R", verb:"agreed with", s:"The government should do more to stop guns getting into the hands of bad people.", short:"Do more to keep guns from bad people", actual:65, other:47 },
+  { r:1, p:"D", verb:"agreed with", s:"Law-abiding citizens should have the right to bear firearms.", short:"Right to bear firearms", actual:68, other:44 },
+  { r:1, p:"R", verb:"agreed with", s:"People are right to be concerned about how climate change might affect us.", short:"Right to be concerned about climate", actual:46, other:44 },
+  { r:1, p:"D", verb:"disagreed with", s:"The U.S. should abolish ICE.", short:"Disagree: abolish ICE", actual:53, other:40 },
+  { r:2, p:"D", q:"What percentage of Democrats are gay, lesbian, or bisexual?", short:"Democrats who are LGB", actual:6.3, other:38.2, own:29.0 },
+  { r:2, p:"R", q:"What percentage of Republicans earn over $250,000 a year?", short:"Republicans earning $250K+", actual:2.2, other:44.1, own:33.3 },
+  { r:2, p:"D", q:"What percentage of Democrats are union members?", short:"Democrats in unions", actual:10.5, other:43.5, own:36.8 },
+  { r:2, p:"R", q:"What percentage of Republicans are evangelical?", short:"Republicans who are evangelical", actual:34.3, other:43.7, own:43.2 },
+  { r:2, p:"D", q:"What percentage of Democrats are atheist or agnostic?", short:"Democrats who are atheist/agnostic", actual:8.7, other:35.7, own:24.5 },
+  { r:2, p:"R", q:"What percentage of Republicans are age 65 or older?", short:"Republicans 65 or older", actual:21.3, other:44.2, own:38.3 },
+  { r:2, p:"D", q:"What percentage of Democrats are Black?", short:"Democrats who are Black", actual:23.9, other:46.4, own:39.4 },
+  { r:2, p:"R", q:"What percentage of Republicans live in the South?", short:"Republicans in the South", actual:35.7, other:44.4, own:39.7 }
+];
+
+const guesses = new Array(Q.length).fill(null);
+let idx = 0;
+const $ = id => document.getElementById(id);
+const fmt = v => (Number.isInteger(v) ? v : v.toFixed(1)) + "%";
+const W = 600, PAD = 18;
+const x = v => PAD + v * (W - 2 * PAD) / 100;
+
+function axisSVG() {
+  let t = "";
+  [0, 25, 50, 75, 100].forEach(v => {
+    const anchor = v === 0 ? "start" : v === 100 ? "end" : "middle";
+    t += `<line x1="${x(v)}" x2="${x(v)}" y1="26" y2="34" stroke="var(--line)" stroke-width="1.5"/>` +
+         `<text x="${x(v)}" y="19" text-anchor="${anchor}">${v}%</text>`;
+  });
+  return `<svg viewBox="0 0 ${W} 36" role="img" aria-label="Scale from 0 to 100 percent">` +
+         `<line x1="${x(0)}" x2="${x(100)}" y1="34" y2="34" stroke="var(--line)" stroke-width="1.5"/>${t}</svg>`;
+}
+
+function rowSVG(v, color, guide, shape) {
+  const H = 40, cy = 20;
+  const anchor = v > 78 ? "end" : "start";
+  const tx = v > 78 ? x(v) - 16 : x(v) + 16;
+  const mark = shape === "diamond"
+    ? `<rect x="${x(v) - 7}" y="${cy - 7}" width="14" height="14" transform="rotate(45 ${x(v)} ${cy})" fill="${color}"/>`
+    : `<circle cx="${x(v)}" cy="${cy}" r="10" fill="${color}"/>`;
+  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true">` +
+    `<line x1="${x(0)}" x2="${x(100)}" y1="${cy}" y2="${cy}" stroke="var(--line)" stroke-width="1.5"/>` +
+    `<line x1="${x(guide)}" x2="${x(guide)}" y1="2" y2="${H - 2}" stroke="var(--actual)" stroke-width="1.5" stroke-dasharray="3 3" opacity=".7"/>` +
+    `<line x1="${x(Math.min(v, guide))}" x2="${x(Math.max(v, guide))}" y1="${cy}" y2="${cy}" stroke="${color}" stroke-width="3" opacity=".35"/>` +
+    mark + `<text class="val" x="${tx}" y="${cy + 8}" text-anchor="${anchor}" style="fill:${color}">${fmt(v)}</text></svg>`;
+}
+
+function render() {
+  if (idx >= Q.length) return showSummary();
+  const q = Q[idx];
+  $("quiz").classList.remove("hidden");
+  $("summary").classList.add("hidden");
+  $("roundChip").textContent = q.r === 1 ? "Round 1: Beliefs" : "Round 2: Who’s in the party?";
+  $("counter").textContent = `Question ${idx + 1} of ${Q.length}`;
+  $("bar").style.width = (idx / Q.length * 100) + "%";
+  const firstOfRound = idx === 0 || Q[idx - 1].r !== q.r;
+  $("roundIntro").textContent = q.r === 1 ? INTRO1 : INTRO2;
+  $("roundIntro").classList.toggle("hidden", !firstOfRound);
+  if (q.r === 1) {
+    $("qText").textContent = `What percentage of ${PARTY[q.p]} ${q.verb} this statement?`;
+    $("qQuote").textContent = "“" + q.s + "”";
+    $("qQuote").classList.remove("hidden");
+  } else {
+    $("qText").textContent = q.q;
+    $("qQuote").classList.add("hidden");
+  }
+  const s = $("slider");
+  s.disabled = false; s.value = 50; $("guessVal").textContent = "50%";
+  $("reveal").classList.add("hidden");
+  $("lockBtn").classList.remove("hidden");
+  $("nextBtn").classList.add("hidden");
+  $("nextBtn").textContent = idx === Q.length - 1 ? "See my results" : "Next question";
+}
+
+function reveal() {
+  const q = Q[idx];
+  const g = Number($("slider").value);
+  guesses[idx] = g;
+  $("slider").disabled = true;
+  const rows = [
+    ["Actual", q.actual, "var(--actual)"],
+    [`${OTHER[q.p]} guessed`, q.other, "var(--theirs)"]
+  ];
+  if (q.r === 2) rows.push([`${PARTY[q.p]} themselves guessed`, q.own, "var(--own)"]);
+  rows.push(["You guessed", g, "var(--you)", "diamond"]);
+  $("plot").innerHTML =
+    `<div class="axis"><span class="spacer"></span>${axisSVG()}</div>` +
+    rows.map(([lab, v, c, sh]) => `<div class="plot-row"><span class="lab">${lab}</span>${rowSVG(v, c, q.actual, sh)}</div>`).join("");
+
+  const gap = Math.round((q.other - q.actual) * 10) / 10;
+  const abs = Math.abs(gap);
+  const yourMiss = Math.round(Math.abs(g - q.actual) * 10) / 10;
+  let t;
+  if (q.r === 1) {
+    t = abs <= 5
+      ? `On this one, ${OTHER[q.p]} were close: their average guess was within <strong>${abs} points</strong>.`
+      : `${OTHER[q.p]} ${gap < 0 ? "underestimated" : "overestimated"} by <strong>${abs} points</strong>. `;
+  } else {
+    t = `${OTHER[q.p]} overestimated by <strong>${abs} points</strong>, and ${PARTY[q.p]} overestimated their own party too. `;
+    if (abs < 10) t = `${OTHER[q.p]} overestimated by <strong>${abs} points</strong>, closer than on most of these. `;
+  }
+  t = t.trim() + ` You were off by <strong>${yourMiss} points</strong>.`;
+  $("takeaway").innerHTML = t;
+  $("reveal").classList.remove("hidden");
+  $("lockBtn").classList.add("hidden");
+  $("nextBtn").classList.remove("hidden");
+  $("nextBtn").focus();
+}
+
+function avg(a) { return a.length ? a.reduce((s, v) => s + v, 0) / a.length : null; }
+
+function sumRow(q, g) {
+  const H = 30, cy = 15;
+  const lo = Math.min(q.actual, q.other), hi = Math.max(q.actual, q.other);
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${q.short}: actual ${fmt(q.actual)}, other party guessed ${fmt(q.other)}${g === null ? "" : ", you guessed " + g + "%"}">` +
+    `<line x1="${x(0)}" x2="${x(100)}" y1="${cy}" y2="${cy}" stroke="var(--line)" stroke-width="1"/>` +
+    [25, 50, 75].map(v => `<line x1="${x(v)}" x2="${x(v)}" y1="4" y2="${H - 4}" stroke="var(--line)" stroke-width="1"/>`).join("") +
+    `<line x1="${x(lo)}" x2="${x(hi)}" y1="${cy}" y2="${cy}" stroke="var(--theirs)" stroke-width="4" opacity=".35"/>` +
+    `<circle cx="${x(q.actual)}" cy="${cy}" r="7" fill="var(--actual)"/>` +
+    `<circle cx="${x(q.other)}" cy="${cy}" r="7" fill="var(--theirs)"/>`;
+  if (g !== null) svg += `<rect x="${x(g) - 6}" y="${cy - 6}" width="12" height="12" transform="rotate(45 ${x(g)} ${cy})" fill="none" stroke="var(--you)" stroke-width="2.5"/>`;
+  return `<div class="sum-row"><span class="lab">${q.short}</span>${svg + "</svg>"}</div>`;
+}
+
+function showSummary() {
+  $("quiz").classList.add("hidden");
+  $("summary").classList.remove("hidden");
+  const answered = Q.map((q, i) => [q, guesses[i]]).filter(([, g]) => g !== null);
+  const yours = avg(answered.map(([q, g]) => Math.abs(g - q.actual)));
+  const theirs = avg((answered.length ? answered.map(([q]) => q) : Q).map(q => Math.abs(q.other - q.actual)));
+  const r = v => (Math.round(v * 10) / 10);
+  if (yours === null) {
+    $("sumHead").textContent = "All the answers";
+    $("score").innerHTML = `<div class="stat"><span class="num theirs">${r(theirs)}</span><span class="cap">points: how far off each party’s average guess about the other side was, on average across all 18 questions</span></div>`;
+  } else {
+    $("sumHead").textContent = yours < theirs ? "You beat the average guess." : "This is harder than it looks.";
+    $("score").innerHTML =
+      `<div class="stat"><span class="num you">${r(yours)}</span><span class="cap">points: your average miss across ${answered.length} question${answered.length === 1 ? "" : "s"}</span></div>` +
+      `<div class="stat"><span class="num theirs">${r(theirs)}</span><span class="cap">points: the other party’s average miss on the same questions</span></div>`;
+  }
+  const axis = `<div class="sum-row"><span class="lab"></span>${axisSVG()}</div>`;
+  $("sum1").innerHTML = `<h3>Round 1: What they believe</h3>` + axis + Q.map((q, i) => q.r === 1 ? sumRow(q, guesses[i]) : "").join("");
+  $("sum2").innerHTML = `<h3>Round 2: Who’s in the party</h3>` + axis + Q.map((q, i) => q.r === 2 ? sumRow(q, guesses[i]) : "").join("");
+  $("bar").style.width = "100%";
+  $("summary").scrollIntoView({ block: "start" });
+}
+
+$("slider").addEventListener("input", e => { $("guessVal").textContent = e.target.value + "%"; });
+$("lockBtn").addEventListener("click", reveal);
+$("nextBtn").addEventListener("click", () => { idx++; render(); $("quiz").scrollIntoView({ block: "start" }); });
+$("skipBtn").addEventListener("click", () => { idx = Q.length; showSummary(); });
+$("restartBtn").addEventListener("click", () => { guesses.fill(null); idx = 0; render(); window.scrollTo(0, 0); });
+
+if (location.hash === "#answers") { idx = Q.length; showSummary(); } else { render(); }
+window.addEventListener("hashchange", () => { if (location.hash === "#answers") { idx = Q.length; showSummary(); } });
+</script>
+</body>
+</html>
